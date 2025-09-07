@@ -7,14 +7,21 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import { useState } from "react";
+import { MdDarkMode } from "react-icons/md";
+import { TiWeatherSunny } from "react-icons/ti";
+import { Button } from "./ui/button";
 
-export default function Navbar() {
-  const [currency, setCurrency] = useState("Dolar");
+export default function Navbar({
+  currency,
+  setCurrency,
+}: {
+  currency: string;
+  setCurrency: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const [checked, setOnChecked] = useState(false);
   return (
-    <div className="grid grid-cols-3 items-center w-full p-4">
-      <p className="text-2xl italic text-center col-end-3">
-        Finance - currency
-      </p>
+    <div className="grid grid-cols-3 items-center w-full p-2">
+      <p className="text-2xl italic text-center col-end-3">Finanzas - Cambio</p>
       <div className="flex items-center justify-end gap-2">
         <Menubar>
           <MenubarMenu>
@@ -51,7 +58,15 @@ export default function Navbar() {
             </MenubarContent>
           </MenubarMenu>
         </Menubar>
-        <p>Currency</p>
+        <p>
+          <Button
+            variant="outline"
+            className="cursor-pointer p-2 y-2"
+            onClick={() => setOnChecked(!checked)}
+          >
+            {checked ? <TiWeatherSunny /> : <MdDarkMode />}
+          </Button>
+        </p>
       </div>
     </div>
   );

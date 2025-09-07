@@ -21,7 +21,7 @@ type dolarProps = {
   fechaActualizacion: string;
 };
 
-export default function Currency({ currency }: { currency: dolarProps }) {
+export default function CurrencyCard({ currency }: { currency: dolarProps }) {
   const { nombre, compra, venta, fechaActualizacion } = currency;
 
   return (

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import Currency from "./components/currency";
+import CurrencyCard from "./components/currencyCard";
+import Footer from "./components/footer";
 import Navbar from "./components/navbar";
-import { dolar } from "./services/dolar";
-import Spinner from "./components/Spinner";
+import Spinner from "./components/spinner";
+import { chileno, dolar, euro, uruguayo } from "./services/exchange";
 
-type dolarProps = {
+type currencyProps = {
   moneda: string;
   casa: string;
   nombre: string;
@@ -14,44 +15,60 @@ type dolarProps = {
 };
 
 export default function App() {
-  const [data, setData] = useState([]);
+  const [currency, setCurrency] = useState("Dolar");
+  const [data, setData] = useState<currencyProps[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
-      dolar().then((data) => {
-        setIsLoading(false);
-        setData(data);
-      });
+      switch (currency) {
+        case "Dolar":
+          return dolar().then((data) => {
+            setIsLoading(false);
+            setData(data);
+          });
+        case "Euro":
+          return euro().then((data) => {
+            setIsLoading(false);
+            setData([data]);
+          });
+        case "Peso Chileno":
+          return chileno().then((data) => {
+            setIsLoading(false);
+            setData([data]);
+          });
+        case "Peso Uruguayo":
+          return uruguayo().then((data) => {
+            setIsLoading(false);
+            setData([data]);
+          });
+      }
       return () => clearTimeout(timer);
     }, 1000);
-  }, []);
+  }, [currency]);
 
   return (
-    <div className="flex flex-col gap-4 items-center w-full justify-between h-screen">
-      <Navbar />
+    <div className="flex flex-col gap-4 items-center w-full justify-between h-dvh">
+      <Navbar currency={currency} setCurrency={setCurrency} />
 
       {isLoading ? (
         <Spinner />
       ) : (
         <div className="flex flex-col gap-4 p-4 items-stretch md:grid grid-cols-4">
           {data.length != 0 ? (
-            data.map((item: dolarProps) => (
-              <Currency currency={item} key={item.nombre} />
+            data.map((item: currencyProps) => (
+              <CurrencyCard currency={item} key={item.nombre} />
             ))
           ) : (
             <p>
               Lo sentimos en este momento no se encontro informacion del estado
-              de la moneda norteamericana.😢
+              de la moneda solicitada.😢
             </p>
           )}
         </div>
       )}
-      <div className="border-2 p-2 w-full text-center">
-        La informacion en pantalla corresponde a la cotizacion del momento.
-        Consulte en fuentes oficiales del gobierno para tener mayor referencia.
-      </div>
+      <Footer />
     </div>
   );
 }
