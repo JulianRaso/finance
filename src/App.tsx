@@ -55,7 +55,13 @@ export default function App() {
       {isLoading ? (
         <Spinner />
       ) : (
-        <div className="flex flex-col gap-4 p-4 items-stretch md:grid grid-cols-4">
+        <div
+          className={
+            data.length > 1
+              ? "flex flex-col gap-4 p-4 items-stretch md:grid grid-cols-4"
+              : "flex items-center justify-center p-4"
+          }
+        >
           {data.length != 0 ? (
             data.map((item: currencyProps) => (
               <CurrencyCard currency={item} key={item.nombre} />

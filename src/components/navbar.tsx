@@ -6,7 +6,7 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdDarkMode } from "react-icons/md";
 import { TiWeatherSunny } from "react-icons/ti";
 import { Button } from "./ui/button";
@@ -19,10 +19,21 @@ export default function Navbar({
   setCurrency: React.Dispatch<React.SetStateAction<string>>;
 }) {
   const [checked, setOnChecked] = useState(false);
+
+  useEffect(() => {
+    if (checked) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [checked]);
+
   return (
-    <div className="grid grid-cols-3 items-center w-full p-2">
-      <p className="text-2xl italic text-center col-end-3">Finanzas - Cambio</p>
-      <div className="flex items-center justify-end gap-2">
+    <div className=" grid grid-cols-3 items-center w-full p-2">
+      <p className="text-md md:text-2xl italic text-center col-end-3">
+        Finanzas - Cambio
+      </p>
+      <div className="flex items-center justify-end gap-1">
         <Menubar>
           <MenubarMenu>
             <MenubarTrigger>{currency}</MenubarTrigger>
